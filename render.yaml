@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: ods-lens-lookup
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: .
