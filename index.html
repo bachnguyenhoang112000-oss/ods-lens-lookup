@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Tra cứu phi tròng tối đa - SV VIP & RX PAL</title>
+  
+  <!-- Favicon SVG Kính mắt -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230d2a20'><circle cx='6' cy='12' r='4' fill='none' stroke='%230d2a20' stroke-width='2'/><circle cx='18' cy='12' r='4' fill='none' stroke='%230d2a20' stroke-width='2'/><path d='M10 12h4' stroke='%230d2a20' stroke-width='2'/></svg>">
+  
+  <!-- Tailwind CSS & Font chữ -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      touch-action: manipulation;
+    }
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+  </style>
+
+  <!-- Nạp cơ sở dữ liệu phôi tròng (Chạy offline 100% không cần web server) -->
+  <script src="data/sv_vip_167.js"></script>
+  <script src="data/sv_vip_160.js"></script>
+  <script src="data/pal_160.js"></script>
+  <script src="data/pal_167.js"></script>
+</head>
+<body class="bg-[#f8faf9] text-[#0e2a1e] min-h-screen antialiased py-8 md:py-16 px-4 sm:px-6 lg:px-8 selection:bg-[#0e2a1e] selection:text-white flex flex-col justify-center">
+
+  <div class="max-w-5xl w-full mx-auto space-y-7">
+
+    <!-- Tiêu đề trang & Mô tả -->
+    <header class="space-y-2">
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#0e2a1e]">
+        Tra cứu phi tròng tối đa
+      </h1>
+      <p class="text-slate-500 text-sm sm:text-base font-normal">
+        Chọn loại tròng và nhập độ để kiểm tra đường kính phôi theo toa.
+      </p>
+    </header>
+
+    <!-- Khối 2 Card Chính -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 items-stretch">
+
+      <!-- ================= CARD TRÁI: THÔNG SỐ TRA CỨU ================= -->
+      <div class="bg-white border border-[#dbe6e0]/80 rounded-[24px] p-6 sm:p-8 shadow-sm flex flex-col justify-between">
+        
+        <div>
+          <!-- Header card -->
+          <div class="pb-3.5">
+            <h2 class="text-base sm:text-lg font-bold text-[#0e2a1e]">Thông số tra cứu</h2>
+          </div>
+
+          <div class="space-y-5">
+            <!-- Loại tròng -->
+            <div>
+              <label for="lensSelect" class="block text-sm font-bold text-[#0e2a1e] mb-2">Loại tròng</label>
+              <div class="relative">
+                <select id="lensSelect" onchange="onLensChange()" class="w-full appearance-none bg-[#f7faf8] border border-[#dbe6e0] rounded-[14px] h-[46px] px-4 pr-10 text-sm font-semibold text-[#112f2b] focus:outline-none focus:ring-2 focus:ring-[#215c49]/15 focus:border-[#215c49] transition-all cursor-pointer">
+                  <option value="05587_SV_VIP_167" selected>SV VIP 1.67</option>
+                  <option value="00466_SV_VIP_160">SV VIP 1.60</option>
+                  <option value="03023_PAL_160">RX PAL 1.60 sht/reg</option>
+                  <option value="03024_PAL_167">RX PAL 1.67 sht/reg</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-[#215c49]">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2 Cột Stepper: SPH & CYL -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              
+              <!-- Độ cầu (SPH) -->
+              <div class="min-w-0">
+                <label for="sphInput" class="block text-sm font-bold text-[#0e2a1e] mb-1.5">Độ cầu (SPH)</label>
+                <div class="flex items-center gap-1.5 min-w-0">
+                  <!-- Dấu - nằm ngoài ô (bên trái) -->
+                  <button type="button" onclick="adjustValue('sph', -0.25)" aria-label="Giảm độ cầu" class="w-8 h-8 sm:w-9 sm:h-9 shrink-0 flex items-center justify-center text-[#215c49] hover:text-[#0e2a1e] hover:bg-slate-100 rounded-xl active:scale-90 transition-all select-none">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="4" y1="12" x2="20" y2="12"></line></svg>
+                  </button>
+
+                  <!-- Ô nhập độ ở giữa (chỉ chứa số độ) -->
+                  <input type="text" id="sphInput" value="-3.25"
+                    onfocus="handleInputFocus(this)"
+                    onclick="handleInputClick(this)"
+                    oninput="onDegreeChange()"
+                    onblur="handleInputBlur('sph')"
+                    onkeydown="handleKeyNavigation(event, 'sph')"
+                    placeholder="VD: +825"
+                    class="flex-1 min-w-0 h-[46px] bg-[#f7faf8] border border-[#dbe6e0] rounded-[14px] text-center text-[19px] font-extrabold text-[#112f2b] focus:border-[#215c49] focus:ring-2 focus:ring-[#215c49]/15 focus:outline-none transition-all tracking-tight placeholder:text-slate-300 placeholder:text-xs placeholder:font-normal">
+
+                  <!-- Dấu + nằm ngoài ô (bên phải) -->
+                  <button type="button" onclick="adjustValue('sph', +0.25)" aria-label="Tăng độ cầu" class="w-8 h-8 sm:w-9 sm:h-9 shrink-0 flex items-center justify-center text-[#215c49] hover:text-[#0e2a1e] hover:bg-slate-100 rounded-xl active:scale-90 transition-all select-none">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="4" x2="12" y2="20"></line><line x1="4" y1="12" x2="20" y2="12"></line></svg>
+                  </button>
+                </div>
+                <div id="sphRangeHint" class="text-[12px] text-slate-400 mt-1.5 font-medium">–16.00 đến +8.00 D</div>
+              </div>
+
+              <!-- Độ loạn (CYL âm) -->
+              <div class="min-w-0">
+                <label for="cylInput" class="block text-sm font-bold text-[#0e2a1e] mb-1.5">Độ loạn (CYL âm)</label>
+                <div class="flex items-center gap-1.5 min-w-0">
+                  <!-- Dấu - nằm ngoài ô (bên trái) -->
+                  <button type="button" onclick="adjustValue('cyl', -0.25)" aria-label="Giảm độ loạn" class="w-8 h-8 sm:w-9 sm:h-9 shrink-0 flex items-center justify-center text-[#215c49] hover:text-[#0e2a1e] hover:bg-slate-100 rounded-xl active:scale-90 transition-all select-none">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="4" y1="12" x2="20" y2="12"></line></svg>
+                  </button>
+
+                  <!-- Ô nhập độ ở giữa (chỉ chứa số độ) -->
+                  <input type="text" id="cylInput" value="-2.25"
+                    onfocus="handleInputFocus(this)"
+                    onclick="handleInputClick(this)"
+                    oninput="onDegreeChange()"
+                    onblur="handleInputBlur('cyl')"
+                    onkeydown="handleKeyNavigation(event, 'cyl')"
+                    placeholder="VD: -225"
+                    class="flex-1 min-w-0 h-[46px] bg-[#f7faf8] border border-[#dbe6e0] rounded-[14px] text-center text-[19px] font-extrabold text-[#112f2b] focus:border-[#215c49] focus:ring-2 focus:ring-[#215c49]/15 focus:outline-none transition-all tracking-tight placeholder:text-slate-300 placeholder:text-xs placeholder:font-normal">
+
+                  <!-- Dấu + nằm ngoài ô (bên phải) -->
+                  <button type="button" onclick="adjustValue('cyl', +0.25)" aria-label="Tăng độ loạn" class="w-8 h-8 sm:w-9 sm:h-9 shrink-0 flex items-center justify-center text-[#215c49] hover:text-[#0e2a1e] hover:bg-slate-100 rounded-xl active:scale-90 transition-all select-none">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="4" x2="12" y2="20"></line><line x1="4" y1="12" x2="20" y2="12"></line></svg>
+                  </button>
+                </div>
+                <div id="cylRangeHint" class="text-[12px] text-slate-400 mt-1.5 font-medium">–6.00 đến 0.00 D</div>
+              </div>
+
+            </div>
+
+            <!-- Tổng độ (SPH + CYL) -->
+            <div class="flex items-center justify-between pt-1.5 text-sm">
+              <span class="text-slate-500 font-medium">Tổng độ (SPH + CYL)</span>
+              <span id="sumDisplay" class="font-extrabold text-[#112f2b] text-[15px]">-5.50 D</span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ================= CARD PHẢI: PHI TỐI ĐA (DEEP GREEN) ================= -->
+      <div id="resultCard" class="relative bg-[#0b261c] rounded-[24px] p-6 sm:p-8 text-white shadow-xl overflow-hidden flex flex-col justify-between min-h-[380px] transition-all duration-300">
+        
+        <!-- Họa tiết vòng tròn đồng tâm ở góc trên bên phải -->
+        <div class="absolute -top-12 -right-12 w-64 h-64 pointer-events-none opacity-20">
+          <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full stroke-emerald-300">
+            <circle cx="150" cy="50" r="40" stroke-width="1.2"/>
+            <circle cx="150" cy="50" r="70" stroke-width="1.2"/>
+            <circle cx="150" cy="50" r="100" stroke-width="1.2"/>
+            <circle cx="150" cy="50" r="130" stroke-width="1.2"/>
+            <circle cx="150" cy="50" r="160" stroke-width="1.2"/>
+          </svg>
+        </div>
+
+        <!-- Nội dung trên: Tiêu đề & Badge -->
+        <div class="relative z-10 space-y-3">
+          <h3 class="text-lg font-bold text-white tracking-tight">Phi tối đa</h3>
+          <div>
+            <span id="statusBadge" class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+              <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> Đánh được
+            </span>
+          </div>
+        </div>
+
+        <!-- Nội dung giữa: Số Phi tối đa -->
+        <div class="relative z-10 my-6">
+          <div id="activeState" class="space-y-2.5">
+            <div class="flex items-baseline gap-2">
+              <span id="maxPhiNum" class="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white transition-all duration-150">Ø80</span>
+              <span id="maxPhiUnit" class="text-2xl font-bold text-emerald-300">mm</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nội dung dưới: Kết quả & Giải thích -->
+        <div class="relative z-10 space-y-1 pt-4 border-t border-emerald-900/40">
+          <div id="resultTitle" class="text-sm font-bold text-white">
+            Đường kính khả dụng tối đa là 80mm
+          </div>
+          <p id="resultDesc" class="text-xs text-emerald-200/70 font-normal leading-relaxed">
+            Toa SPH -3.25 / CYL -2.25 nằm trong năng lực sản xuất của phôi SV VIP 1.67.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= XỬ LÝ LOGIC NGHIỆP VỤ ================= -->
+  <script>
+    function getActiveDb() {
+      const selectedKey = document.getElementById('lensSelect').value;
+      return window.LENS_DATABASE ? window.LENS_DATABASE[selectedKey] : null;
+    }
+
+    function onLensChange() {
+      const activeDb = getActiveDb();
+      if (activeDb) {
+        document.getElementById('sphRangeHint').innerText = `${activeDb.sph_min.toFixed(2)} đến +${activeDb.sph_max.toFixed(2)} D`;
+        document.getElementById('cylRangeHint').innerText = `${activeDb.cyl_min.toFixed(2)} đến ${activeDb.cyl_max.toFixed(2)} D`;
+      }
+      executeLookup();
+    }
+
+    // Khi người dùng nhấn chuột hoặc focus vào ô nhập: xóa độ cũ để nhập trực tiếp độ mới
+    function handleInputFocus(input) {
+      if (input.value.trim() !== '') {
+        input.dataset.prevVal = input.value;
+      }
+      input.value = '';
+      input.dataset.isEditing = 'true';
+    }
+
+    function handleInputClick(input) {
+      if (input.dataset.isEditing !== 'true') {
+        handleInputFocus(input);
+      }
+    }
+
+    // Khi rời khỏi ô nhập (Blur)
+    function handleInputBlur(type) {
+      const input = document.getElementById(type + 'Input');
+      input.dataset.isEditing = 'false';
+      if (!input.value.trim() || input.value.trim() === '+' || input.value.trim() === '-') {
+        input.value = input.dataset.prevVal || (type === 'sph' ? '-3.25' : '-2.25');
+      }
+      formatOnBlur(type);
+    }
+
+    // Tăng giảm giá trị bằng nút bấm + / -
+    function adjustValue(type, delta) {
+      const activeDb = getActiveDb();
+      const input = document.getElementById(type + 'Input');
+      const isCyl = (type === 'cyl');
+      let val = parseDegree(input.value, isCyl);
+      if (val === null) {
+        val = parseDegree(input.dataset.prevVal || (isCyl ? '-2.25' : '-3.25'), isCyl) || 0;
+      }
+      val = Math.round((val + delta) * 4) / 4;
+
+      const minSph = activeDb ? activeDb.sph_min : -16.00;
+      const maxSph = activeDb ? activeDb.sph_max : 8.00;
+      const minCyl = activeDb ? activeDb.cyl_min : -6.00;
+      const maxCyl = activeDb ? activeDb.cyl_max : 0.00;
+
+      if (!isCyl) {
+        val = Math.max(minSph, Math.min(maxSph, val));
+        input.value = (val > 0 ? '+' : '') + val.toFixed(2);
+      } else {
+        val = Math.max(minCyl, Math.min(maxCyl, val));
+        input.value = val.toFixed(2);
+      }
+
+      input.dataset.prevVal = input.value;
+      input.dataset.isEditing = 'false';
+      onDegreeChange();
+    }
+
+    // Hỗ trợ phím mũi tên Lên / Xuống và phím Enter trên bàn phím
+    function handleKeyNavigation(e, type) {
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        adjustValue(type, +0.25);
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        adjustValue(type, -0.25);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        formatOnBlur(type);
+        if (type === 'sph') {
+          const cylInput = document.getElementById('cylInput');
+          cylInput.focus();
+        } else {
+          document.getElementById(type + 'Input').blur();
+        }
+      }
+    }
+
+    // Sự kiện khi thay đổi độ (gõ bàn phím hoặc bấm +/-)
+    function onDegreeChange() {
+      const sphRaw = document.getElementById('sphInput').value;
+      const cylRaw = document.getElementById('cylInput').value;
+
+      const sph = parseDegree(sphRaw, false);
+      const cyl = parseDegree(cylRaw, true);
+
+      // Nếu người dùng đang gõ dở dấu +/- hoặc ô trống, tạm dừng cập nhật để không nhấp nháy
+      if (sph === null || cyl === null) {
+        return;
+      }
+
+      const sum = sph + cyl;
+      document.getElementById('sumDisplay').innerText = (sum > 0 ? '+' : '') + sum.toFixed(2) + ' D';
+      
+      // Tính toán & hiển thị phi tối đa đồng thời
+      executeLookup();
+    }
+
+    // Định dạng lại số khi rời khỏi ô nhập (Blur hoặc Enter)
+    function formatOnBlur(type) {
+      const input = document.getElementById(type + 'Input');
+      const isCyl = (type === 'cyl');
+      let val = parseDegree(input.value, isCyl);
+
+      if (val === null) {
+        val = parseDegree(input.dataset.prevVal || (isCyl ? '-2.25' : '-3.25'), isCyl) || 0;
+      }
+
+      if (!isCyl) {
+        input.value = (val > 0 ? '+' : '') + val.toFixed(2);
+      } else {
+        input.value = val.toFixed(2);
+      }
+
+      input.dataset.prevVal = input.value;
+      input.dataset.isEditing = 'false';
+      onDegreeChange();
+    }
+
+    // Chuyển chuỗi thành số độ chuẩn (hỗ trợ nhập tắt quang học: +825 -> +8.25, -1125 -> -11.25)
+    function parseDegree(str, isCyl = false) {
+      if (typeof str === 'number') return isCyl ? -Math.abs(str) : str;
+      if (!str) return null;
+      const s = str.toString().trim().replace(/,/g, '.');
+      if (!s || s === '+' || s === '-' || s === '.') return null;
+
+      const isNeg = s.startsWith('-');
+      const numStr = s.replace(/^[+-]/, '').trim();
+      if (!numStr) return null;
+
+      let val = 0;
+      if (numStr.includes('.')) {
+        const parsed = parseFloat(numStr);
+        if (isNaN(parsed)) return null;
+        val = parsed;
+      } else {
+        const intVal = parseInt(numStr, 10);
+        if (isNaN(intVal)) return null;
+        // Quy tắc nhập quang học: 3 chữ số trở lên hoặc 25, 50, 75 sẽ chia cho 100
+        // VD: 825 -> 8.25, 1125 -> 11.25, 325 -> 3.25, 225 -> 2.25, 50 -> 0.50, 75 -> 0.75
+        // Số <= 20 (như 8, 10, 1, 2) hiểu là số độ nguyên (8.00, 10.00)
+        if (numStr.length >= 3 || intVal === 25 || intVal === 50 || intVal === 75) {
+          val = intVal / 100.0;
+        } else {
+          val = intVal;
+        }
+      }
+
+      val = Math.round(val * 4) / 4;
+
+      if (isCyl) {
+        // Độ loạn gia công phôi luôn là số âm (hoặc 0)
+        return -Math.abs(val);
+      } else {
+        return isNeg ? -val : val;
+      }
+    }
+
+    // Đặt lại giá trị mặc định
+    function resetForm() {
+      document.getElementById('sphInput').value = '-3.25';
+      document.getElementById('cylInput').value = '-2.25';
+      formatOnBlur('sph');
+      formatOnBlur('cyl');
+    }
+
+    // HÀM TRA CỨU PHI TỐI ĐA THỜI GIAN THỰC
+    function executeLookup(isButtonClick = false) {
+      const activeDb = getActiveDb();
+      const sph = parseDegree(document.getElementById('sphInput').value, false);
+      const cyl = parseDegree(document.getElementById('cylInput').value, true);
+
+      if (sph === null || cyl === null) {
+        return;
+      }
+      
+      const sphKey = sph.toFixed(2);
+      const cylKey = cyl.toFixed(2);
+
+      let maxPhi = "0";
+      if (activeDb && activeDb.matrix && activeDb.matrix[sphKey]) {
+        maxPhi = activeDb.matrix[sphKey][cylKey] || "0";
+      }
+      const maxPhiStr = String(maxPhi);
+
+      const maxPhiNum = document.getElementById('maxPhiNum');
+      const maxPhiUnit = document.getElementById('maxPhiUnit');
+      const statusBadge = document.getElementById('statusBadge');
+      const resultTitle = document.getElementById('resultTitle');
+      const resultDesc = document.getElementById('resultDesc');
+      const lensName = activeDb ? activeDb.name : 'phôi kính';
+
+      if (maxPhiStr !== "0") {
+        maxPhiNum.innerText = `Ø${maxPhiStr}`;
+        maxPhiNum.className = maxPhiStr.length > 4 
+          ? "text-5xl sm:text-6xl font-extrabold tracking-tight text-white transition-all duration-150"
+          : "text-6xl sm:text-7xl font-extrabold tracking-tight text-white transition-all duration-150";
+        maxPhiUnit.style.display = "inline";
+
+        statusBadge.className = "inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+        statusBadge.innerHTML = `<svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg> Đánh được`;
+
+        resultTitle.innerText = `Đường kính khả dụng tối đa là ${maxPhiStr}mm`;
+        resultDesc.innerText = `Toa SPH ${sph >= 0 ? '+' : ''}${sph.toFixed(2)} / CYL ${cyl.toFixed(2)} nằm trong năng lực sản xuất của ${lensName}.`;
+      } else {
+        maxPhiNum.innerText = `VƯỢT DẢI`;
+        maxPhiNum.className = "text-4xl sm:text-5xl font-extrabold tracking-tight text-rose-400 transition-all duration-150";
+        maxPhiUnit.style.display = "none";
+
+        statusBadge.className = "inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/40";
+        statusBadge.innerHTML = `<svg class="w-3.5 h-3.5 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg> Vượt dải độ`;
+
+        resultTitle.innerText = `Không thể đánh tròng cho toa kính này`;
+        resultDesc.innerText = `Toa SPH ${sph >= 0 ? '+' : ''}${sph.toFixed(2)} / CYL ${cyl.toFixed(2)} vượt ngoài dải độ của ${lensName}.`;
+      }
+    }
+
+    // Chạy tính toán tự động ngay khi mở web
+    onDegreeChange();
+  </script>
+</body>
+</html>
